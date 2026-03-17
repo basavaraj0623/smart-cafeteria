@@ -25,7 +25,7 @@ export default function Register() {
         return;
       }
 
-      const res = await axios.post("https://smart-cafeteria.onrender.com/api/otp/send-otp", {
+      const res = await axios.post("https://smart-cafeteria-1.onrender.com/api/otp/send-otp", {
         email: formData.email,
       });
 
@@ -40,13 +40,13 @@ export default function Register() {
     e.preventDefault();
     setMessage("");
     try {
-      const res = await axios.post("https://smart-cafeteria.onrender.com/api/otp/verify-otp", {
+      const res = await axios.post("https://smart-cafeteria-1.onrender.com/api/otp/verify-otp", {
         email: formData.email,
         otp,
       });
 
       if (res.data.message === "OTP Verified") {
-        await axios.post("https://smart-cafeteria.onrender.com/api/auth/register", formData);
+        await axios.post("https://smart-cafeteria-1.onrender.com/api/auth/register", formData);
         alert("✅ Registered successfully!");
         window.location.href = "/login";
       } else {

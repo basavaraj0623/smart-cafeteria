@@ -16,7 +16,7 @@ export default function MenuBuilder() {
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
 
-  const BASE_URL = "https://smart-cafeteria.onrender.com";
+  const BASE_URL = "https://smart-cafeteria-1.onrender.com";
 
   // ✅ Fetch cafeteria and its menu
   useEffect(() => {

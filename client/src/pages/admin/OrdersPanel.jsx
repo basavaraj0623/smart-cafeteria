@@ -22,7 +22,7 @@ export default function OrdersPanel() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("https://smart-cafeteria.onrender.com/api/admin/orders", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/admin/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -39,7 +39,7 @@ export default function OrdersPanel() {
   const updateStatus = async (orderId, newStatus) => {
     try {
       await axios.put(
-        `https://smart-cafeteria.onrender.com/api/admin/order-status/${orderId}`,
+        `https://smart-cafeteria-1.onrender.com/api/admin/order-status/${orderId}`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -59,7 +59,7 @@ export default function OrdersPanel() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`https://smart-cafeteria.onrender.com/api/admin/order/${orderId}`, {
+      await axios.delete(`https://smart-cafeteria-1.onrender.com/api/admin/order/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("🗑️ Order deleted successfully!");

@@ -9,7 +9,7 @@ export default function Orders() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://https://smart-cafeteria.onrender.com/api/user/my-orders", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/user/my-orders", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -28,7 +28,7 @@ export default function Orders() {
 
   const deleteOrder = async (orderId) => {
     try {
-      await axios.delete(`http://https://smart-cafeteria.onrender.com/api/user/order/${orderId}`, {
+      await axios.delete(`https://smart-cafeteria-1.onrender.com/api/user/order/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders((prev) => prev.filter((order) => order._id !== orderId));
@@ -43,7 +43,7 @@ export default function Orders() {
     try {
       await Promise.all(
         orders.map((order) =>
-          axios.delete(`http://https://smart-cafeteria.onrender.com/api/user/order/${order._id}`, {
+          axios.delete(`https://smart-cafeteria-1.onrender.com/api/user/order/${order._id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
         )

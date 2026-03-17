@@ -63,7 +63,7 @@ export default function AdminDashboard() {
   const fetchAdminProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("https://smart-cafeteria.onrender.com/api/auth/me", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const { name, avatar } = res.data.user;
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
   const fetchOrderData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("https://smart-cafeteria.onrender.com/api/admin/orders", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/admin/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const orders = res.data || [];
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
   const fetchCafeteriaInfo = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("https://smart-cafeteria.onrender.com/api/admin/my-cafeteria", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/admin/my-cafeteria", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCafeteria(res.data.cafeteria || null);
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
         return;
       }
       const res = await axios.put(
-        "https://smart-cafeteria.onrender.com/api/admin/profile",
+        "https://smart-cafeteria-1.onrender.com/api/admin/profile",
         formData,
         {
           headers: {
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
   const avatarToShow =
     previewPic ||
     (profilePic?.startsWith("/uploads")
-      ? `http://https://smart-cafeteria.onrender.com${profilePic}`
+      ? `https://smart-cafeteria-1.onrender.com${profilePic}`
       : profilePic) ||
     "https://i.pravatar.cc/100?u=admin";
 
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
             <img
               src={
                 cafeteria.logo?.startsWith("/uploads")
-                  ? `http://https://smart-cafeteria.onrender.com${cafeteria.logo}`
+                  ? `https://smart-cafeteria-1.onrender.com${cafeteria.logo}`
                   : cafeteria.logo
               }
               alt="Cafeteria Logo"

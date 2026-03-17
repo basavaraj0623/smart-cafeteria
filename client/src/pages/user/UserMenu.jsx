@@ -27,7 +27,7 @@ export default function UserMenu() {
 
   useEffect(() => {
     const fetchCafeterias = async () => {
-      const res = await axios.get("http://https://smart-cafeteria.onrender.com/api/user/cafeterias", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/user/cafeterias", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCafeterias(res.data);
@@ -46,7 +46,7 @@ export default function UserMenu() {
     if (!selectedCafeteria) return;
     const fetchMenu = async () => {
       const res = await axios.get(
-        `http://https://smart-cafeteria.onrender.com/api/user/menu/${selectedCafeteria}`,
+        `https://smart-cafeteria-1.onrender.com/api/user/menu/${selectedCafeteria}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMenu(res.data);
@@ -103,7 +103,7 @@ export default function UserMenu() {
     setTimeout(async () => {
       try {
         const res = await axios.post(
-          "http://https://smart-cafeteria.onrender.com/api/user/order",
+          "https://smart-cafeteria-1.onrender.com/api/user/order",
           {
             items: cart,
             cafeteriaId: selectedCafeteria,
@@ -261,7 +261,7 @@ export default function UserMenu() {
                   src={
                     item.image?.startsWith("http")
                       ? item.image
-                      : `http://https://smart-cafeteria.onrender.com/${item.image}`
+                      : `https://smart-cafeteria-1.onrender.com/${item.image}`
                   }
                   alt={item.name}
                   className="rounded object-cover aspect-[4/3]"

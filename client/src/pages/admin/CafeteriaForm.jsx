@@ -22,7 +22,7 @@ export default function CafeteriaForm() {
 
   const fetchCafeteria = async () => {
     try {
-      const res = await axios.get("https://smart-cafeteria.onrender.com/api/admin/my-cafeteria", {
+      const res = await axios.get("https://smart-cafeteria-1.onrender.com/api/admin/my-cafeteria", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data?.cafeteria) setCafeteria(res.data.cafeteria);
@@ -68,8 +68,8 @@ export default function CafeteriaForm() {
       };
 
       const url = isEditing
-        ? `https://smart-cafeteria.onrender.com/api/admin/cafeteria/${cafeteria._id}`
-        : "https://smart-cafeteria.onrender.com/api/admin/cafeteria";
+        ? `https://smart-cafeteria-1.onrender.com/api/admin/cafeteria/${cafeteria._id}`
+        : "https://smart-cafeteria-1.onrender.com/api/admin/cafeteria";
       const method = isEditing ? "put" : "post";
 
       const body = {
@@ -98,7 +98,7 @@ export default function CafeteriaForm() {
 
     try {
       await axios.delete(
-        `https://smart-cafeteria.onrender.com/api/admin/cafeteria/${cafeteria._id}`,
+        `https://smart-cafeteria-1.onrender.com/api/admin/cafeteria/${cafeteria._id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessage("Cafeteria deleted successfully");

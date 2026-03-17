@@ -15,7 +15,7 @@ export default function Login() {
     setErrorMsg("");
 
     try {
-      const res = await axios.post("https://smart-cafeteria.onrender.com/api/auth/login", {
+      const res = await axios.post("https://smart-cafeteria-1.onrender.com/api/auth/login", {
         email,
         password,
       });

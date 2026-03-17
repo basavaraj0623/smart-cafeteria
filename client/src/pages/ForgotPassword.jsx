@@ -12,7 +12,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setMessage("");
     try {
-      await axios.post("https://smart-cafeteria.onrender.com/api/otp/send-otp", { email });
+      await axios.post("https://smart-cafeteria-1.onrender.com/api/otp/send-otp", { email });
       setStep(2);
       setMessage("📩 OTP sent to email.");
     } catch (err) {
@@ -24,7 +24,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setMessage("");
     try {
-      await axios.post("https://smart-cafeteria.onrender.com/api/otp/verify-otp", { email, otp });
+      await axios.post("https://smart-cafeteria-1.onrender.com/api/otp/verify-otp", { email, otp });
       setStep(3);
       setMessage("✅ OTP verified. Set your new password.");
     } catch (err) {
@@ -36,7 +36,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setMessage("");
     try {
-      await axios.post("https://smart-cafeteria.onrender.com/api/auth/reset-password", { email, newPassword });
+      await axios.post("https://smart-cafeteria-1.onrender.com/api/auth/reset-password", { email, newPassword });
       setMessage("✅ Password reset successfully");
       setTimeout(() => (window.location.href = "/login"), 1500);
     } catch (err) {
