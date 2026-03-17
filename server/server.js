@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 
+// ✅ Load env variables
 dotenv.config();
 
 const app = express();
@@ -33,17 +34,25 @@ app.get("/", (req, res) => {
   res.send("🚀 Smart Cafeteria API is running");
 });
 
-// ✅ MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// ✅ MongoDB Connection (ROBUST VERSION)
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000, // fail fast if network issue
+    });
 
-// ✅ Start server
+    console.log("✅ MongoDB Atlas connected");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:");
+    console.error(error.message);
+    process.exit(1); // stop app if DB fails
+  }
+};
+
+// ✅ Start server AFTER DB connects
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  await connectDB();
 });
