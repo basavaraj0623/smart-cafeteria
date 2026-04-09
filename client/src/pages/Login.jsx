@@ -36,6 +36,7 @@ export default function Login() {
     localStorage.setItem("name", user.name);
 
     navigate(role === "admin" ? "/admin" : "/user");
+    window.location.reload();
 
   } catch (err) {
     console.error("Login failed:", err);
