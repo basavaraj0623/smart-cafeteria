@@ -17,25 +17,33 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "All fields including role are required" });
     }
 
-    if (!["user", "admin"].includes(role.toLowerCase())) {
+    const normalizedRole = role.toLowerCase();
+
+    if (!["user", "admin"].includes(normalizedRole)) {
       return res.status(400).json({ error: "Invalid role" });
     }
 
     const existingUser = await User.findOne({ email });
 
-    // 🔥 USER EXISTS → ADD ROLE
+    // 🔥 USER EXISTS → ADD ROLE SAFELY
     if (existingUser) {
-      if (existingUser.role.includes(role)) {
+
+      // ✅ FIX: convert string → array (IMPORTANT)
+      if (!Array.isArray(existingUser.role)) {
+        existingUser.role = [existingUser.role];
+      }
+
+      if (existingUser.role.includes(normalizedRole)) {
         return res.status(400).json({
-          error: `${role} already exists for this email`,
+          error: `${normalizedRole} already exists for this email`,
         });
       }
 
-      existingUser.role.push(role);
+      existingUser.role.push(normalizedRole);
       await existingUser.save();
 
       return res.status(200).json({
-        message: `${role} role added successfully`,
+        message: `${normalizedRole} role added successfully`,
       });
     }
 
@@ -46,7 +54,7 @@ router.post("/register", async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: [role],
+      role: [normalizedRole], // ✅ always array
     });
 
     await user.save();
@@ -57,10 +65,9 @@ router.post("/register", async (req, res) => {
 
   } catch (err) {
     console.error("❌ Registration Error:", err);
-    return res.status(500).json({ error: "Registration failed" });
+    return res.status(500).json({ error: err.message }); // 🔥 show real error
   }
 });
-
 
 /**
  * @route   POST /api/auth/login
