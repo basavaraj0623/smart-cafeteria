@@ -11,32 +11,37 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
+  e.preventDefault();
+  setErrorMsg("");
 
-    try {
-      const res = await axios.post("https://smart-cafeteria-1.onrender.com/api/auth/login", {
+  try {
+    const res = await axios.post(
+      "https://smart-cafeteria-1.onrender.com/api/auth/login",
+      {
         email,
         password,
-      });
-
-      const { token, role: serverRole, user } = res.data;
-
-      if (serverRole !== role) {
-        return setErrorMsg(`❌ Role mismatch! You tried logging in as "${role}"`);
       }
+    );
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", serverRole);
-      localStorage.setItem("name", user.name);
+    const { token, roles, user } = res.data; // ✅ FIX
 
-      navigate(serverRole === "admin" ? "/admin" : "/user");
-    } catch (err) {
-      console.error("Login failed:", err);
-      setErrorMsg(err.response?.data?.error || "Login failed. Please try again.");
+    // ✅ FIX: check inside array
+    if (!roles.includes(role)) {
+      return setErrorMsg(`❌ Role mismatch! You tried logging in as "${role}"`);
     }
-  };
 
+    // ✅ Save selected role (not full array)
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    localStorage.setItem("name", user.name);
+
+    navigate(role === "admin" ? "/admin" : "/user");
+
+  } catch (err) {
+    console.error("Login failed:", err);
+    setErrorMsg(err.response?.data?.error || "Login failed. Please try again.");
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#6d28d9] bg-[length:300%_300%] animate-gradient">
       <div className="w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl space-y-6">
