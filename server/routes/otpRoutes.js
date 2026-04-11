@@ -1,14 +1,33 @@
 const express = require("express");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const router = express.Router();
 
-const { Resend } = require("resend");
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const otpStore = new Map();
 
-// SEND OTP
+// ✅ Gmail transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// ✅ Verify connection (optional but useful)
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("❌ Email server error:", err);
+  } else {
+    console.log("✅ Email server ready");
+  }
+});
+
+
+// =========================
+// ✅ SEND OTP
+// =========================
 router.post("/send-otp", async (req, res) => {
   const { email } = req.body;
 
@@ -21,22 +40,31 @@ router.post("/send-otp", async (req, res) => {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   otpStore.set(email, otp);
 
-  try {
-    await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: email,
-      subject: "Smart Cafeteria OTP",
-      html: `<h2>Your OTP is: ${otp}</h2>`,
-    });
+  const mailOptions = {
+    from: `"Smart Cafeteria" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "🔐 Smart Cafeteria OTP Verification",
+    html: `
+      <div style="font-family: Arial; padding: 20px">
+        <h2>🔐 OTP Verification</h2>
+        <p>Your OTP is:</p>
+        <h1 style="color: #4f46e5;">${otp}</h1>
+        <p>This OTP is valid for a short time.</p>
+      </div>
+    `,
+  };
 
-    console.log("✅ OTP sent:", otp);
+  try {
+    await transporter.sendMail(mailOptions);
+
+    console.log(`✅ OTP sent to ${email}: ${otp}`);
 
     return res.status(200).json({
       message: "OTP sent successfully",
     });
 
   } catch (err) {
-    console.error("❌ Resend error:", err);
+    console.error("❌ Email error:", err);
 
     return res.status(500).json({
       error: "Failed to send OTP",
@@ -44,9 +72,14 @@ router.post("/send-otp", async (req, res) => {
   }
 });
 
-// VERIFY OTP
+
+// =========================
+// ✅ VERIFY OTP
+// =========================
 router.post("/verify-otp", (req, res) => {
   const { email, otp } = req.body;
+
+  console.log("👉 Verifying OTP:", email, otp);
 
   if (!email || !otp) {
     return res.status(400).json({ error: "Email and OTP required" });

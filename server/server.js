@@ -9,21 +9,30 @@ dotenv.config();
 
 const app = express();
 
+// =========================
+// ✅ CORS CONFIG (secure)
+// =========================
+app.use(
+  cors({
+    origin: ["https://smart-cafeteria-zeta.vercel.app"], // your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-// ✅ Middleware
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+// =========================
+// ✅ MIDDLEWARE
+// =========================
+app.use(express.json()); // ❌ removed duplicate
 
-app.use(express.json());
-app.use(express.json());
-
-// ✅ Serve static files
+// =========================
+// ✅ STATIC FILES
+// =========================
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-// ✅ Routes
+// =========================
+// ✅ ROUTES
+// =========================
 const authRoutes = require("./routes/authRoutes");
 const otpRoutes = require("./routes/otpRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -36,17 +45,26 @@ app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/menu", menuRoutes);
 
-// ✅ Default route
+// =========================
+// ✅ HEALTH CHECK ROUTE
+// =========================
 app.get("/", (req, res) => {
   res.send("🚀 Smart Cafeteria API is running");
 });
 
-// ✅ MongoDB Connection
+// =========================
+// ✅ MONGODB CONNECTION
+// =========================
 const connectDB = async () => {
   try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is missing in .env");
+    }
+
     await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 5000,
     });
+
     console.log("✅ MongoDB Atlas connected");
   } catch (error) {
     console.error("❌ MongoDB connection error:", error.message);
@@ -54,7 +72,9 @@ const connectDB = async () => {
   }
 };
 
-// ✅ Start server ONLY after DB connects (IMPORTANT)
+// =========================
+// ✅ START SERVER
+// =========================
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
