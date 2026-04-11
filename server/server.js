@@ -10,20 +10,34 @@ dotenv.config();
 const app = express();
 
 // =========================
-// ✅ CORS CONFIG (secure)
+// ✅ CORS CONFIG (FIXED 🔥)
 // =========================
 app.use(
   cors({
-    origin: ["https://smart-cafeteria-zeta.vercel.app"], // your frontend
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl)
+      if (!origin) return callback(null, true);
+
+      // ✅ allow all Vercel + localhost
+      if (
+        origin.includes("vercel.app") ||
+        origin.includes("localhost")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("❌ Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
 // =========================
 // ✅ MIDDLEWARE
 // =========================
-app.use(express.json()); // ❌ removed duplicate
+app.use(express.json());
 
 // =========================
 // ✅ STATIC FILES
